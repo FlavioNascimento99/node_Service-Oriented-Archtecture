@@ -9,7 +9,7 @@ const router = Router();
 router.get('/', getPessoasCONTROLLER)
 router.get('/:id', getPessoasPorIdCONTROLLER)
 router.post('/', postPessoaCONTROLLER)
-router.patch('/', patchPessoaCONTROLLER)
-router.delete('/', deletePessoaCONTROLLER)
+router.patch('/:id', patchPessoaCONTROLLER)
+router.delete('/:id', deletePessoaCONTROLLER)
 
 module.exports = router;

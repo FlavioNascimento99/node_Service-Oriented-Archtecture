@@ -1,4 +1,4 @@
-const { getPessoas, getPessoaPorId, postPessoa } = require('../services/pessoa')
+const { getPessoas, getPessoaPorId, postPessoa, patchPessoas } = require('../services/pessoa')
 
 function getPessoasCONTROLLER (req, res) {
     try {
@@ -35,7 +35,10 @@ function postPessoaCONTROLLER (req, res) {
 
 function patchPessoaCONTROLLER (req, res) {
     try {
-        res.send('Requisição - PATCH - Edição')
+        const id = req.params.id
+        const body = req.params.body
+        const pessoas = patchPessoaCONTROLLER(body ,id)
+        res.send("Modificado", pessoas)
     } catch (error) {
         res.status(500);
         res.send(error.message)
