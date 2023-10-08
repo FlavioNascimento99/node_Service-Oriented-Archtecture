@@ -26,57 +26,44 @@ function postPessoa (novaPessoa) {
 }
 
 function patchPessoas (patcher, id) {
-
-    /*
-    
-        - Transformamos o conteúdo do JSON em Objeto.
-        - Como são vários objetos, este por sua vez, se torna uma lista destes.
-    
-    */
+    // - Transformamos o conteúdo do JSON em Objeto.
+    // - Como são vários objetos, este por sua vez, se torna uma lista destes.
       let pessoas = JSON.parse(fs.readFileSync('pessoas.json'))
-    
-    /*  
-    
-        - Utilizando do findIndex quero capturar o primeiro Objeto(pessoa) que possua o valor "id" (pessoa.id)
-        parecido com o id parametrizado nesta função(patchPessoas(patcher, id)), com isso agora, separamos o objeto
-        que queremos modificar, o armazenando dentro dessa variável.
-    
-    */  
+    // - Utilizando do findIndex quero capturar o primeiro Objeto(pessoa) que possua o valor "id" (pessoa.id)
+    //   parecido com o id parametrizado nesta função(patchPessoas(patcher, id)), com isso agora, separamos o objeto
+    //   que queremos modificar, o armazenando dentro dessa variável.
     const patchIndex = pessoas.findIndex(pessoa => pessoa.id === id)
 
-    /*  
-
-        - Utiliza de Spread para separar o Objeto específico [baseado em seu Index].
-        - Aplica patcher, que nada mais é que a alteração (parâmetro primário desta função).
-        - Com isso entenda que, patcher irá trazer consigo a propriedade { "nome" : "conteúdo" }
-        que por sua vez com outro Spread irá pegar o objeto específico dentro da lista e substituirá pelo 
-        seu novo conteúdo
-   
-    */ 
+    // - Utiliza de Spread para separar o Objeto específico [baseado em seu Index].
+    //  - Aplica patcher, que nada mais é que a alteração (parâmetro primário desta função).
+    //  - Com isso entenda que, patcher irá trazer consigo a propriedade { "nome" : "conteúdo" }
+    //  que por sua vez com outro Spread irá pegar o objeto específico dentro da lista e substituirá pelo 
+    //  seu novo conteúdo 
     const patchedContent = { ... pessoas [ patchIndex ], ... patcher }
-
-    /* 
-
-        - Pegamos a variável Pessoa (Lista de Objetos)
-        - Com base no Id do Objeto [pacthIndex]
-        - Substituímos de seu conteúdo pelo da variável (patchedContent).
-    
-    */
+    //  - Pegamos a variável Pessoa (Lista de Objetos)
+    //  - Com base no Id do Objeto [pacthIndex]
+    //  - Substituímos de seu conteúdo pelo da variável (patchedContent).
     pessoas[patchIndex] = patchedContent
-    
-    /*  
-    
-        - Por fim finalizamos a função transformando a variável pessoas (JavaScript Value)
-        em JSON (JavaScript Object Notation) 
-    
-    */
+    // - Por fim finalizamos a função transformando a variável pessoas (JavaScript Value)
+    // em JSON (JavaScript Object Notation) 
     fs.writeFileSync('pessoas.json', JSON.stringify(pessoas))
-
 }
+
+function deletePessoa(id) {
+    //  Convertemos o JSON para JSV.
+    let pessoas = JSON.parse(fs.readFileSync('pessoas.json'))
+    //  - Utilizamos novamente do FindIndex, para fazermos a busca por Id do objeto.
+    const deleteIndex = pessoas.findIndex(pessoa => pessoa.id === id)
+    //  - Por fim, aplicamos a função Splice, para deletarmos.
+    listaPessoaAtualizada = pessoas.filter(item => item.id !== id)
+    //  - Aplicamos rollback novamente no pessoas.json e é isso.
+    fs.writeFileSync('pessoas.json', JSON.stringify(listaPessoaAtualizada))
+} 
 
 module.exports = {
     getPessoas,
     getPessoaPorId,
     postPessoa,
     patchPessoas,
+    deletePessoa
 }
